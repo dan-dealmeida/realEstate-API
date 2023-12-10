@@ -116,7 +116,7 @@ router.post('/login', async (req, res) => {
     }
 
     // Se as credenciais são válidas, gera um token JWT
-    const token = jwt.sign({ userId: user._id, role: user.role }, 'secreto_do_jwt', { expiresIn: '1h' });
+    const token = jwt.sign({ userId: user._id, role: user.role }, process.env.TOKEN_SECRET, { expiresIn: '1h' });
 
     res.status(200).json({ token });
   } catch (error) {

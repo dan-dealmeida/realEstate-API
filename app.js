@@ -1,12 +1,18 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const userRoutes = require('./routes/userRoutes');
+const realEstateRoutes = require('./routes/realEstateRoutes');
+const favoritesRoutes = require('./routes/favoritesRoutes');
+const visitRoutes = require('./routes/visitRoutes');
 const User = require('./models/User');
 
 const app = express();
 
 app.use(express.json());
 app.use('/users', userRoutes);
+app.use('/favorites', favoritesRoutes);
+app.use('/realEstate', visitRoutes);
+app.use('/favorites', realEstateRoutes);
 
 const PORT = 3000;
 
@@ -50,4 +56,4 @@ const createAdminUser = async () => {
 
 createAdminUser().then(() => {
   mongoose.connection.close();
-});
+}
