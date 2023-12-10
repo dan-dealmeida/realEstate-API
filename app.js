@@ -4,6 +4,7 @@ const userRoutes = require('./routes/userRoutes');
 const realEstateRoutes = require('./routes/realEstateRoutes');
 const favoritesRoutes = require('./routes/favoritesRoutes');
 const visitRoutes = require('./routes/visitRoutes');
+const installDatabase = require('./middleware/dbInstaller');
 const User = require('./models/User');
 
 const app = express();
@@ -16,7 +17,17 @@ app.use('/favorites', realEstateRoutes);
 
 const PORT = 3000;
 
-
+// Defina a rota GET /install/
+app.get('/install/', async (req, res) => {
+  try {
+    await mongoose.connect('mongodb+srv://admin:admin@cluster0.wb1rayu.mongodb.net/API-Daniel?retryWrites=true&w=majority');
+    await installDatabase();
+    res.status(200).json({ message: 'Instalação do banco de dados concluída com sucesso!' });
+  } catch (error) {
+    console.error('Erro ao instalar banco de dados:', error);
+    res.status(500).json({ error: 'Erro ao instalar banco de dados' });
+  }
+});
 
 
 
