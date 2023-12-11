@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const realEstate = require('./models/realEstate');
-const authMiddleware = require('./middleware/authMiddleware');
+const realEstate = require('../models/realEstate');
+const authMiddleware = require('../middleware/authMiddleware');
 
 // Middleware para autenticação
 router.use(authMiddleware);

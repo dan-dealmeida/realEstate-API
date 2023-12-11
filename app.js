@@ -19,14 +19,22 @@ app.use('/visits', visitRoutes);
 
 mongoose.set('strictQuery', false);
 
-mongoose.connect(mongoURI)
-  .then(async () => {
-    console.log('Connected to MongoDB');
-    await installDatabase(); 
 
-    // Verifying and creating default admin user
-    const createAdminUser = async () => {
+
+const connectToMongoDB = async () => {
+  try {
+    await mongoose.connect(mongoURI); // Connect to MongoDB
+    console.log('Connected to MongoDB');
+
+    // Installation script after successful connection
+    await installDatabase();
+
+    // Start the server after database setup and admin creation
+    app.listen(PORT, async () => {
+      console.log(`Server running on port ${PORT}`);
+      
       try {
+        // Create admin user only after the installation script completes
         const adminUser = await User.findOne({ role: 'admin' });
 
         if (!adminUser) {
@@ -43,16 +51,12 @@ mongoose.connect(mongoURI)
       } catch (error) {
         console.error('Error creating admin user:', error);
       }
-    };
-
-    await createAdminUser();
-  })
-  .then(() => {
-    app.listen(PORT, () => {
-      console.log(`Server running on port ${PORT}`);
     });
-  })
-  .catch((error) => {
+  } catch (error) {
     console.error('Error connecting to MongoDB:', error);
     process.exit(1); // Exiting the process on DB connection error
-  });
+  }
+};
+
+// Call the function to connect and perform operations
+connectToMongoDB();

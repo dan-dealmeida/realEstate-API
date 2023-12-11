@@ -1,8 +1,9 @@
 const mongoose = require('mongoose');
-const User = require('./models/User');
-const RealEstate = require('./models/RealEstate');
-const Favorite = require('./models/Favorite');
-const Visit = require('./models/Visit');
+const User = require('../models/User');
+const RealEstate = require('../models/realEstate');
+const Favorite = require('../models/favorites');
+const Visit = require('../models/visit');
+const { Types: { ObjectId } } = mongoose;
 
 async function installDatabase() {
     
@@ -11,7 +12,9 @@ async function installDatabase() {
     const usersData = [
       { nome: 'Usuário 1', email: 'usuario1@example.com', senha: 'senha123', role: 'user' },
       { nome: 'Usuário 2', email: 'usuario2@example.com', senha: 'senha456', role: 'user' },
-      // ... adicione mais dados conforme necessário
+      { nome: 'Usuário 3', email: 'usuario3@example.com', senha: 'senha123', role: 'user' },
+      { nome: 'Usuário 4', email: 'usuario4@example.com', senha: 'senha456', role: 'user' },
+      { nome: 'Usuário 5', email: 'usuario5@example.com', senha: 'senha123', role: 'user' },
     ];
 
     const realEstatesData = [
@@ -43,31 +46,22 @@ async function installDatabase() {
       ];
 
     
-    const realEstateIds = [
-    'id1', 
-    'id2', 
-    'id3', 
-    'id4', 
-    'id5' 
-    ];
+      const realEstateIds = [
+        new ObjectId(), 
+        new ObjectId(),
+        new ObjectId(),
+        new ObjectId(),
+        new ObjectId(),
+      ];
+  
 
-    const favoritesData = [
-        {
-            realEstates: [realEstateIds[0]]
-          },
-          {
-            realEstates: [realEstateIds[1]]
-          },
-          {
-            realEstates: [realEstateIds[2]]
-          },
-          {
-            realEstates: [realEstateIds[3]]
-          },
-          {
-            realEstates: [realEstateIds[4]]
-          }
-    ];
+      const favoritesData = [
+        { realEstates: [realEstateIds[0]] },
+        { realEstates: [realEstateIds[1]] },
+        { realEstates: [realEstateIds[2]] },
+        { realEstates: [realEstateIds[3]] },
+        { realEstates: [realEstateIds[4]] },
+      ];
 
     const visitsData = [
         {
@@ -101,8 +95,6 @@ async function installDatabase() {
     console.log('Instalação do banco de dados concluída com sucesso!');
   } catch (error) {
     console.error('Erro ao instalar banco de dados:', error);
-  } finally {
-    mongoose.connection.close();
   }
 }
 
