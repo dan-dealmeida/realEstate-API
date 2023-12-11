@@ -5,18 +5,21 @@ const realEstateRoutes = require('./routes/realEstateRoutes');
 const favoritesRoutes = require('./routes/favoritesRoutes');
 const visitRoutes = require('./routes/visitRoutes');
 const installDatabase = require('./middleware/dbInstaller');
-const User = require('./models/User');
+const swaggerUi = require('swagger-ui-express')
+const specs = require('./swagger.js');
+const User = require('./models/User');  
 
 const app = express();
 const PORT = 3000;
 const mongoURI = 'mongodb+srv://admin:admin@cluster0.wb1rayu.mongodb.net/API-Daniel?retryWrites=true&w=majority';
+
 
 app.use(express.json());
 app.use('/users', userRoutes);
 app.use('/favorites', favoritesRoutes);
 app.use('/realEstate', realEstateRoutes);
 app.use('/visits', visitRoutes); 
-
+app.use('/docs', swaggerUi.serve, swaggerUi.setup(specs));
 mongoose.set('strictQuery', false);
 
 

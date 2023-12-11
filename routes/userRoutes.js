@@ -3,6 +3,44 @@ const router = express.Router();
 const { body, validationResult } = require('express-validator');
 const User = require('../models/User');
 
+
+/**
+ * @swagger
+ * tags:
+ *   name: Users
+ *   description: Endpoints relacionados a usuários
+ */
+
+/**
+ * @swagger
+ * /users/cadastro:
+ *   post:
+ *     summary: Cria um novo usuário
+ *     description: Cria um novo usuário com nome, email e senha.
+ *     tags: [Users]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               nome:
+ *                 type: string
+ *               email:
+ *                 type: string
+ *               senha:
+ *                 type: string
+ *     responses:
+ *       '201':
+ *         description: Usuário criado com sucesso
+ *       '400':
+ *         description: Erros de validação ou usuário já existente
+ *       '500':
+ *         description: Erro interno do servidor
+ */
+
+
 router.post('/cadastro', 
   async (req, res) => {
     //console.log(req.body);
@@ -37,6 +75,37 @@ router.post('/cadastro',
   }
 );
 
+/**
+ * @swagger
+ * /users/administradores:
+ *   post:
+ *     summary: Cria um novo administrador
+ *     description: Cria um novo administrador com nome, email e senha.
+ *     tags: [Users]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               nome:
+ *                 type: string
+ *               email:
+ *                 type: string
+ *               senha:
+ *                 type: string
+ *     responses:
+ *       '201':
+ *         description: Administrador criado com sucesso
+ *       '400':
+ *         description: Erros de validação ou email já em uso
+ *       '403':
+ *         description: Acesso negado ou não é um administrador
+ *       '500':
+ *         description: Erro interno do servidor
+ */
+
 // Rota para criar administradores
 router.post('/administradores', async (req, res) => {
   // Verifica se o usuário logado é um administrador
@@ -69,6 +138,31 @@ router.post('/administradores', async (req, res) => {
   }
 });
 
+
+/**
+ * @swagger
+ * /users/usuarios/{id}:
+ *   delete:
+ *     summary: Exclui um usuário não administrador
+ *     description: Exclui um usuário com base no ID fornecido.
+ *     tags: [Users]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: ID do usuário a ser excluído
+ *         schema:
+ *           type: string
+ *     responses:
+ *       '200':
+ *         description: Usuário excluído com sucesso
+ *       '403':
+ *         description: Acesso negado ou usuário não é um administrador
+ *       '404':
+ *         description: Usuário não encontrado ou é um administrador
+ *       '500':
+ *         description: Erro interno do servidor
+ */
 // Rota para excluir usuários não administradores
 router.delete('/usuarios/:id', async (req, res) => {
   // Verifica se o usuário logado é um administrador
@@ -95,7 +189,34 @@ router.delete('/usuarios/:id', async (req, res) => {
   }
 });
 
-
+/**
+ * @swagger
+ * /users/login:
+ *   post:
+ *     summary: Autenticação de usuário
+ *     description: Verifica as credenciais do usuário e gera um token JWT.
+ *     tags: [Users]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               email:
+ *                 type: string
+ *               senha:
+ *                 type: string
+ *     responses:
+ *       '200':
+ *         description: Login bem-sucedido, token gerado
+ *       '401':
+ *         description: Credenciais inválidas
+ *       '404':
+ *         description: Usuário não encontrado
+ *       '500':
+ *         description: Erro interno do servidor
+ */
 // Rota para autenticação (login) e geração do token JWT
 router.post('/login', async (req, res) => {
   const { email, senha } = req.body;
@@ -125,6 +246,44 @@ router.post('/login', async (req, res) => {
   }
 });
 
+
+/**
+ * @swagger
+ * /users/usuarios/{id}:
+ *   put:
+ *     summary: Atualiza dados do usuário
+ *     description: Atualiza os dados do usuário com base no ID fornecido.
+ *     tags: [Users]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: ID do usuário a ser atualizado
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               nome:
+ *                 type: string
+ *               email:
+ *                 type: string
+ *               senha:
+ *                 type: string
+ *     responses:
+ *       '200':
+ *         description: Dados do usuário atualizados com sucesso
+ *       '403':
+ *         description: Acesso negado ou usuário não tem permissão para atualizar
+ *       '404':
+ *         description: Usuário não encontrado
+ *       '500':
+ *         description: Erro interno do servidor
+ */
 // Rota para atualizar dados do usuário
 router.put('/usuarios/:id', async (req, res) => {
   const userId = req.params.id;
